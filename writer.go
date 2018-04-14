@@ -34,7 +34,7 @@ func (f *FileLogger) logWriter() {
 		case str := <-f.logChan:
 			f.p(str)
 		case <-seqTimer.C:
-		
+
 		}
 	}
 }
@@ -106,7 +106,7 @@ func (f *FileLogger) Info(format string, v ...interface{}) {
 		funcName = funcName[idx+1:]
 	}
 	if f.logLevel <= INFO {
-		f.logChan <- fmt.Sprintf("[%v:%v:%v]", shortFileName(file), line, funcName) + fmt.Sprintf("\033[1;37m[INFO] "+format+" \033[0m ", v...)
+		f.logChan <- fmt.Sprintf("[%v:%v:%v]", shortFileName(file), line, funcName) + fmt.Sprintf("[INFO] "+format, v...)
 	}
 }
 
