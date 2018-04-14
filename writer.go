@@ -10,6 +10,7 @@ import (
 	"log"
 	"runtime"
 	"time"
+	"strings"
 )
 
 const (
@@ -100,8 +101,12 @@ func (f *FileLogger) Info(format string, v ...interface{}) {
 	pc, file, line, _ := runtime.Caller(3) //calldepth=3
 	function := runtime.FuncForPC(pc)
 	funcName := function.Name()
+	idx := strings.Index(funcName, "/")
+	if idx != -1 {
+		funcName = funcName[idx+1:]
+	}
 	if f.logLevel <= INFO {
-		f.logChan <- fmt.Sprintf("[%v:%v:%v]", shortFileName(file), line, funcName) + fmt.Sprintf("\033[1;35m[INFO] "+format+" \033[0m ", v...)
+		f.logChan <- fmt.Sprintf("[%v:%v:%v]", shortFileName(file), line, funcName) + fmt.Sprintf("\033[1;37m[INFO] "+format+" \033[0m ", v...)
 	}
 }
 
@@ -115,6 +120,10 @@ func (f *FileLogger) Warn(format string, v ...interface{}) {
 	pc, file, line, _ := runtime.Caller(3) //calldepth=3
 	function := runtime.FuncForPC(pc)
 	funcName := function.Name()
+	idx := strings.Index(funcName, "/")
+	if idx != -1 {
+		funcName = funcName[idx+1:]
+	}
 	if f.logLevel <= WARN {
 		f.logChan <- fmt.Sprintf("[%v:%v:%v]", shortFileName(file), line, funcName) + fmt.Sprintf("\033[1;33m[WARN] "+format+" \033[0m ", v...)
 	}
@@ -130,6 +139,10 @@ func (f *FileLogger) Error(format string, v ...interface{}) {
 	pc, file, line, _ := runtime.Caller(3) //calldepth=3
 	function := runtime.FuncForPC(pc)
 	funcName := function.Name()
+	idx := strings.Index(funcName, "/")
+	if idx != -1 {
+		funcName = funcName[idx+1:]
+	}
 	if f.logLevel <= ERROR {
 		f.logChan <- fmt.Sprintf("[%v:%v:%v]", shortFileName(file), line, funcName) + fmt.Sprintf("\033[1;4;31m[ERROR] "+format+" \033[0m ", v...)
 	}
